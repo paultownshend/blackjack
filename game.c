@@ -6,5 +6,9 @@
  #include "card.h"
  
  int main(void) {
-    /* Your code goes here */
+    card *head = make_deck();
+    card *shuffled = make_deck();
+    shuffled = shuffle(shuffled);
+    printDeckComp(head, shuffled);
+    return 0;
  }

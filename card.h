@@ -8,3 +8,13 @@ typedef struct Card {
 } card;
 
 /* Prototype all functions below:*/
+
+card *make_deck(card *iCard);
+
+void destroy_deck(card *deck);
+
+void show(card *deck);
+
+int count_deck(card *deck);
+
+card *shuffle(card *deck);
