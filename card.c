@@ -15,40 +15,76 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
-
-card *make_deck(card *iCard) {
+card *make_deck() {
     char suits[] = {'C', 'D', 'H', 'S'};
-    card *current = iCard;
-    for (int i = 1; i < 14; i++) {
-        for (int s = 0; s < 4; s++) {
-	   if (i == iCard->rank && suits[s] == iCard->suit) {
-		continue;
-	   }
-	   while (current->next != NULL) {
-		   current = current->next;
-	   }
-           current->next = malloc(sizeof(card));
-	   current->next->rank = i;
-	   current->next->suit = suits[s];
+    card *current = malloc(sizeof(card));
+    for (int i = 1; i <= 13; i++) {
+        for (int s = 0; s < 4; s++) {	
+           card *newcard = malloc(sizeof(card));
+	   newcard->rank = i;
+	   newcard->suit = suits[s];
+	   //printf("%c %i\n", newcard->suit, newcard->rank);
+	   newcard->next = current;
+	   current = newcard;
 	}
     }
+    card *temp = current;
+    card *t;
+    
+    while (temp->next != 0) {
+	t = temp;
+	temp = temp-> next;
+    }
+    free(t->next);
+    t->next = NULL;
+    return current;
 }
 
 void show(card *deck) {
 	card *current = deck;
-	while (current != NULL) {
+	while (current->next != NULL) {
 		printf("%c %i\n", current->suit, current->rank);
 		current = current->next;
 	}
 }
 
 void destroy_deck(card *deck) {
-	card *current = deck;
-	while((current != NULL) {
-		deck = deck->next;
+	card *current;
+	while((current = deck) != NULL) {
 		free(current);
+		deck = deck->next;
 	}
+}
+
+card *deal(card *deck) {
+	card *temp = deck;
+        if (deck->next == NULL) {
+		free(deck);
+		printf("%c %i\n", temp->suit, temp->rank);
+		return temp;
+	}
+	card *c;
+	while(temp->next != NULL) {
+		c = temp;
+		temp = temp->next;
+	}
+	printf("%c %i\n", temp->suit, temp->rank);
+	free(c->next);
+	c->next = NULL;
+	return temp;
+}
+
+int total(card *hand) {
+	int sum = 0;
+	while (hand != NULL) {
+		if (hand->rank < 10) {
+			sum += hand->rank;
+		}
+		else if(hand->rank >= 10) {
+			sum += 10;
+		}
+	}
+	return sum;
 }
 
 /* counts the number of cards in the list headed by "deck" */
@@ -89,18 +125,4 @@ card *shuffle(card *deck) {
         retdeck=temp;
     }
     return retdeck;
-}
-
-int main(void) {
-
-	card *c;
-	c = malloc(sizeof(card));
-	c->rank = 5;
-	c->suit = 'H';
-	printf("suit = %c\nrank = %i\n", c->suit, 8);
-	make_deck(c);
-	card *c1 = c->next;
-	printf("suit of next card = %c\nrank of next card = %i\n", c1->suit, c1->rank);
-        printf("%i\n", count_deck(c));
-	show(c);
 }

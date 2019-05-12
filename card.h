@@ -9,7 +9,7 @@ typedef struct Card {
 
 /* Prototype all functions below:*/
 
-card *make_deck(card *iCard);
+card *make_deck();
 
 void destroy_deck(card *deck);
 
